@@ -82,7 +82,7 @@ Pod::Spec.new do |spec|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-spec.source       = { :git => "https://github.com/vladshakhtar/GameControllerBinder.git", :tag => "1.0.0" }
+spec.source       = { :git => "https://github.com/vladshakhtar/GameControllerBinder.git", :tag => "v1.0.0" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
