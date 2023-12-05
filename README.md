@@ -68,3 +68,11 @@ controllerBinder.bindButtonToUIElement(buttonName: .buttonMenu, uiElement: searc
             self.performSearch()  //You can use also @objc functions or @IBAction functions here
         }
 ```
+
+## License
+
+GameControllerBinder is available under the MIT license. See the LICENSE file for details at 
+
+```
+https://github.com/vladshakhtar/GameControllerBinder/blob/main/LICENSE
+```
