@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "GameControllerBinder"
-  spec.version      = "1.0.0"
+  spec.version      = "1.1.0"
   spec.summary      = "A Swift framework for easily integrating game controller inputs with UI elements in iOS applications."
 
   # This description is used to generate tags and improve search results.
@@ -25,7 +25,7 @@ Pod::Spec.new do |spec|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   spec.description  = <<-DESC
-                       GameControllerBinder simplifies the process of binding game controller inputs to UI elements and actions within your iOS app. With support for various controller types, including PlayStation and Xbox controllers, this framework allows for quick setup and configuration of controller inputs to enhance the gaming experience on iOS devices.
+                       GameControllerBinder simplifies the process of binding game controller inputs to UI elements and actions within your iOS app. With support for various controller types, including PlayStation and Xbox controllers, this framework allows for quick setup and configuration of controller inputs to enhance the gaming experience on iOS devices. It also allows to easily use game controller to navigate through UI elements in your app.
                    DESC
 
   spec.homepage     = "https://github.com/vladshakhtar/GameControllerBinder"

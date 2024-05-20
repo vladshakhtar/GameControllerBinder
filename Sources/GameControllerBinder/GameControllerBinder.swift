@@ -120,7 +120,8 @@ public final class GameControllerBinder {
     private var psButtonActionReleaseBindings: [PlayStationButtonName: (press: () -> Void, release: () -> Void)] = [:]
     private var xboxButtonActionBindings: [XboxButtonName: () -> Void] = [:]
     private var xboxButtonActionReleaseBindings: [XboxButtonName: (press: () -> Void, release: () -> Void)] = [:]
-    
+    private let focusManager = FocusManager()
+    private var desiredInitialFocusElementName: String?
     
     
     /// Initializes a new GameControllerBinder instance.
@@ -232,11 +233,93 @@ public final class GameControllerBinder {
     /// - Parameters:
     ///   - xboxButtonName: The name of the Xbox controller button to which the action will be bound.
     ///   - pressAction: The closure to be executed when the Xbox controller button is pressed.
-    ///   - releaseAction: The closure to be executed when the Xbox controller button is releasen.
+    ///   - releaseAction: The closure to be executed when the Xbox controller button is released.
     public func bindXboxButtonToAction(xboxButtonName : XboxButtonName,  pressAction: @escaping () -> Void, releaseAction: @escaping () -> Void) {
         xboxButtonActionReleaseBindings[xboxButtonName] = (pressAction, releaseAction)
     }
     
+    /// Registers all focusable subviews from the given view.
+    /// - Parameter view: The view containing the subviews to register.
+    public func registerAllFocusableSubviews(from view: UIView) {
+        let allFocusables = view.allSubviews.compactMap { $0 as? Focusable }
+        allFocusables.forEach { focusable in
+                focusManager.registerFocusableElement(focusable)
+        }
+        focusManager.calculateNearestNeighbors()
+    }
+    
+    /// Sets the initial focus to a specific focusable element.
+    /// - Parameter element: The focusable element to set as the initial focus.
+    public func setInitialFocus(to element: Focusable) {
+        if isConnected {
+            focusManager.setInitialFocus(to: element.name)
+        } else {
+            desiredInitialFocusElementName = element.name
+        }
+    }
+    
+
+    /// Sets up default directional input handlers for navigation using the D-pad and/or thumbsticks.
+    /// - Parameters:
+    ///   - useDpad: A Boolean value indicating whether to use the D-pad for navigation. Defaults to `true`.
+    ///   - useLeftThumbstick: A Boolean value indicating whether to use the left thumbstick for navigation. Defaults to `false`.
+    ///   - useRightThumbstick: A Boolean value indicating whether to use the right thumbstick for navigation. Defaults to `false`.
+    public func setupDefaultDirectionalInputHandlers(useDpad: Bool = true, useLeftThumbstick: Bool = false, useRightThumbstick: Bool = false) {
+        if useDpad {
+            bindButtonToAction(buttonName: .dpadUp) {
+                self.focusManager.changeFocus(direction: .up)
+            }
+            bindButtonToAction(buttonName: .dpadDown) {
+                self.focusManager.changeFocus(direction: .down)
+            }
+            bindButtonToAction(buttonName: .dpadLeft) {
+                self.focusManager.changeFocus(direction: .left)
+            }
+            bindButtonToAction(buttonName: .dpadRight) {
+                self.focusManager.changeFocus(direction: .right)
+            }
+        }
+        if useLeftThumbstick {
+            bindThumbstickToAction(thumbstickName: .leftThumbstick) { xValue, yValue in
+                if abs(xValue) > abs(yValue) { // Horizontal movement
+                    if xValue > 0 {
+                        self.focusManager.changeFocus(direction: .right)
+                    } else {
+                        self.focusManager.changeFocus(direction: .left)
+                    }
+                } else { // Vertical movement
+                    if yValue > 0 {
+                        self.focusManager.changeFocus(direction: .up)
+                    } else {
+                        self.focusManager.changeFocus(direction: .down)
+                    }
+                }
+            }
+        }
+        if useRightThumbstick {
+            bindThumbstickToAction(thumbstickName: .rightThumbstick) { xValue, yValue in
+                if abs(xValue) > abs(yValue) { // Horizontal movement
+                    if xValue > 0 {
+                        self.focusManager.changeFocus(direction: .right)
+                    } else {
+                        self.focusManager.changeFocus(direction: .left)
+                    }
+                } else { // Vertical movement
+                    if yValue > 0 {
+                        self.focusManager.changeFocus(direction: .up)
+                    } else {
+                        self.focusManager.changeFocus(direction: .down)
+                    }
+                }
+            }
+        }
+    }
+    
+    /// Sets up an input handler to simulate a tap action on the focused element when a specific button is pressed.
+    /// - Parameter buttonName: The name of the button to bind the tap action to. Defaults to `buttonA`.
+    public func setupTapActionInputHandler(for buttonName: ButtonName = .buttonA) {
+        bindButtonToAction(buttonName: buttonName, action: focusManager.simulateTapOnFocusedElement)
+    }
     
     
     
