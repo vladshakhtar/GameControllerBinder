@@ -14,6 +14,9 @@ The GameControllerBinder framework simplifies the process of binding game contro
 - Support for PlayStation and Xbox controllers
 - Easy integration with UI elements
 - Customize button actions for press and release states
+- Automatic focus management for UI elements
+- Directional navigation using D-pad and thumbsticks
+- Simplified navigation setup for UI elements
 
 
 ## Installation
@@ -24,7 +27,7 @@ To integrate GameControllerBinder into your Xcode project using Swift Package Ma
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/vladshakhtar/GameControllerBinder.git", from: "1.0.0")
+    .package(url: "https://github.com/vladshakhtar/GameControllerBinder.git", from: "1.1.0")
 ]
 ```
 
@@ -56,7 +59,7 @@ binder.bindButtonToAction(buttonName: .buttonA) {
 
 To bind a controller's thumbstick to UI navigation:
 ```swift
-controllerBinder.bindThumbstickToAction(thumbstickName: .rightThumbstick) { [weak self] (xValue, yValue) in
+binder.bindThumbstickToAction(thumbstickName: .rightThumbstick) { [weak self] (xValue, yValue) in
             //code that handles Thumbsticks movements
         }
     
@@ -64,11 +67,39 @@ controllerBinder.bindThumbstickToAction(thumbstickName: .rightThumbstick) { [wea
 
 To bind a controller`s button to UIButton:
 ```swift
-controllerBinder.bindButtonToUIElement(buttonName: .buttonMenu, uiElement: searchButton) {
+binder.bindButtonToUIElement(buttonName: .buttonMenu, uiElement: searchButton) {
             self.performSearch()  //You can use also @objc functions or @IBAction functions here
         }
 ```
 
+Write next methods in override func viewDidAppear(_ animated: Bool) :
+To register all focusable UI elements and set up default directional input handlers:
+```swift
+// Register all focusable subviews
+binder.registerAllFocusableSubviews(from: view)
+
+// Set up default directional input handlers
+binder.setupDefaultDirectionalInputHandlers()
+```
+To set the initial focus on a specific element:
+```swift
+binder.setInitialFocus(to: yourInitialFocusableElement)
+```
+To set up the tap action input handler:
+```swift
+binder.setupTapActionInputHandler(for: .buttonA)
+```
+
+So everything will look like :
+```swift
+override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        binder.registerAllFocusableSubviews(from: view)
+        binder.setupDefaultDirectionalInputHandlers()
+        binder.setInitialFocus(to: yourInitialFocusableElement)
+        binder.setupTapActionInputHandler()
+    }
+```
 ## License
 
 GameControllerBinder is available under the MIT license. See the LICENSE file for details at 
