@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "GameControllerBinder"
-  spec.version      = "1.1.0"
+  spec.version      = "1.1.1"
   spec.summary      = "A Swift framework for easily integrating game controller inputs with UI elements in iOS applications."
 
   # This description is used to generate tags and improve search results.
@@ -82,7 +82,7 @@ Pod::Spec.new do |spec|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-spec.source       = { :git => "https://github.com/vladshakhtar/GameControllerBinder.git", :tag => "v1.1.0" }
+spec.source       = { :git => "https://github.com/vladshakhtar/GameControllerBinder.git", :tag => "v1.1.1" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
