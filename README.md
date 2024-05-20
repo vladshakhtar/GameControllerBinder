@@ -24,7 +24,7 @@ To integrate GameControllerBinder into your Xcode project using Swift Package Ma
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/yourusername/GameControllerBinder.git", from: "1.0.0")
+    .package(url: "https://github.com/vladshakhtar/GameControllerBinder.git", from: "1.0.0")
 ]
 ```
 
