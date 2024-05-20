@@ -335,12 +335,20 @@ public final class GameControllerBinder {
         setupXboxButtonHandlers(for: controller)
         detectControllerType(for: controller)
         
+        if let elementName = desiredInitialFocusElementName {
+            focusManager.setInitialFocus(to: elementName)
+            desiredInitialFocusElementName = nil
+        } else {
+            focusManager.setInitialFocus()
+        }
     }
     
     @objc private func controllerDisconnected() {
         // Handle controller disconnection if needed
         isConnected = false
         self.controllerType = nil
+        
+        focusManager.clearFocus()
     }
     
     private func setupButtonHandlers(for controller: GCController) {
